@@ -1,6 +1,5 @@
 {
   "searchstats.name": "SearchStats",
 
-  "modmenu.descriptionTranslation.searchstats": "${mod_description}",
-  "fml.menu.mods.info.description.searchstats": "${mod_description}"
+  "message.searchstats.export": "Export All"
 }

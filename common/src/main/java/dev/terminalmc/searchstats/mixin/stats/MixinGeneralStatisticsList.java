@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Guntram Blohm
- * Copyright 2024 TerminalMC
+ * Copyright 2025 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package dev.terminalmc.searchstats.mixin;
+package dev.terminalmc.searchstats.mixin.stats;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -26,16 +26,16 @@ import net.minecraft.client.gui.screens.achievement.StatsScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$MobsStatisticsList")
-public class MixinMobsStatisticsList {
+@Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$GeneralStatisticsList")
+public class MixinGeneralStatisticsList {
     @WrapOperation(
-            method = "<init>", 
-            at = @At(
-                    value = "INVOKE", 
-                    target = "Lnet/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList;addEntry(Lnet/minecraft/client/gui/components/AbstractSelectionList$Entry;)I"
+            method="<init>",
+            at=@At(
+                    value="INVOKE",
+                    target="Lnet/minecraft/client/gui/screens/achievement/StatsScreen$GeneralStatisticsList;addEntry(Lnet/minecraft/client/gui/components/AbstractSelectionList$Entry;)I"
             )
     )
-    private int wrapAddEntry(StatsScreen.MobsStatisticsList instance,
+    private int wrapAddEntry(StatsScreen.GeneralStatisticsList instance,
                              AbstractSelectionList.Entry<?> entry, Operation<Integer> original) {
         if (((NamedStatEntry)entry).searchstats$matchesSelection(SearchStats.getSearchString())) {
             return original.call(instance, entry);

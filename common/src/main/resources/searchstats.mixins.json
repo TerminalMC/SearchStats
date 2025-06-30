@@ -7,13 +7,15 @@
   "mixins": [
   ],
   "client": [
-    "MixinGeneralStatisticsList",
-    "MixinGeneralStatisticsListEntry",
-    "MixinItemStatisticsList",
-    "MixinItemStatisticsListItemRow",
-    "MixinMobsStatisticsList",
-    "MixinMobsStatisticsListMobRow",
-    "MixinStatsScreen"
+    "connection.MixinConnectScreen",
+    "connection.MixinMinecraft",
+    "stats.MixinGeneralStatisticsList",
+    "stats.MixinGeneralStatisticsListEntry",
+    "stats.MixinItemStatisticsList",
+    "stats.MixinItemStatisticsListItemRow",
+    "stats.MixinMobsStatisticsList",
+    "stats.MixinMobsStatisticsListMobRow",
+    "stats.MixinStatsScreen"
   ],
   "server": [
   ],

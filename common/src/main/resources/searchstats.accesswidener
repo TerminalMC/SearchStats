@@ -1,6 +1,16 @@
 accessWidener v2 named
 # https://fabricmc.net/wiki/tutorial:accesswideners
 accessible class net/minecraft/client/gui/screens/achievement/StatsScreen$GeneralStatisticsList
+accessible class net/minecraft/client/gui/screens/achievement/StatsScreen$GeneralStatisticsList$Entry
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen$GeneralStatisticsList$Entry stat Lnet/minecraft/stats/Stat;
 accessible class net/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList blockColumns Ljava/util/List;
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList itemColumns Ljava/util/List;
+accessible class net/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList$ItemRow
 accessible class net/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList
+accessible class net/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList$MobRow
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList$MobRow mobName Lnet/minecraft/network/chat/Component;
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList$MobRow kills Lnet/minecraft/network/chat/Component;
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList$MobRow killedBy Lnet/minecraft/network/chat/Component;
 accessible class net/minecraft/client/gui/components/AbstractSelectionList$Entry
+accessible field net/minecraft/client/gui/screens/achievement/StatsScreen NO_VALUE_DISPLAY Lnet/minecraft/network/chat/Component;
