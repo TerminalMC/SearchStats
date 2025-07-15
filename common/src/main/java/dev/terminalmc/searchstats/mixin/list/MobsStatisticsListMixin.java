@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Guntram Blohm
- * Copyright 2024 TerminalMC
+ * Copyright 2025 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,33 @@
  * limitations under the License.
  */
 
-package dev.terminalmc.searchstats.mixin;
+package dev.terminalmc.searchstats.mixin.list;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.terminalmc.searchstats.SearchStats;
-import dev.terminalmc.searchstats.util.NamedStatEntry;
+import dev.terminalmc.searchstats.util.inject.INamedStatEntry;
 import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$MobsStatisticsList")
-public class MixinMobsStatisticsList {
+public class MobsStatisticsListMixin {
+
     @WrapOperation(
-            method = "<init>", 
+            method = "<init>",
             at = @At(
-                    value = "INVOKE", 
+                    value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/screens/achievement/StatsScreen$MobsStatisticsList;addEntry(Lnet/minecraft/client/gui/components/AbstractSelectionList$Entry;)I"
             )
     )
-    private int wrapAddEntry(StatsScreen.MobsStatisticsList instance,
-                             AbstractSelectionList.Entry<?> entry, Operation<Integer> original) {
-        if (((NamedStatEntry)entry).searchstats$matchesSelection(SearchStats.getSearchString())) {
+    private int wrapAddEntry(
+            StatsScreen.MobsStatisticsList instance,
+            AbstractSelectionList.Entry<?> entry,
+            Operation<Integer> original
+    ) {
+        if (((INamedStatEntry) entry).searchstats$matchesSelection(SearchStats.getSearchString())) {
             return original.call(instance, entry);
         }
         return 0; // Ignored by caller

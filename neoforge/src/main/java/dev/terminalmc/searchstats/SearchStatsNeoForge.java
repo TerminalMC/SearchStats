@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 TerminalMC
+ * Copyright 2025 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,14 @@ package dev.terminalmc.searchstats;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
 
-@Mod(value = SearchStats.MOD_ID, dist = Dist.CLIENT)
+@Mod(
+        value = SearchStats.MOD_ID,
+        dist = Dist.CLIENT
+)
 public class SearchStatsNeoForge {
+
     public SearchStatsNeoForge() {
-        // Main initialization
+        // Initialize client
         SearchStats.init();
     }
 }

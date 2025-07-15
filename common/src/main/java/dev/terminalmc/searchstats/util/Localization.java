@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 TerminalMC
+ * Copyright 2025 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ import dev.terminalmc.searchstats.SearchStats;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+@SuppressWarnings("unused")
 public final class Localization {
+
     public static String translationKey(String path) {
         return SearchStats.MOD_ID + "." + path;
     }

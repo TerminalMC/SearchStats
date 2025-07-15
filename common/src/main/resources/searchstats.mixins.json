@@ -7,13 +7,13 @@
   "mixins": [
   ],
   "client": [
-    "MixinGeneralStatisticsList",
-    "MixinGeneralStatisticsListEntry",
-    "MixinItemStatisticsList",
-    "MixinItemStatisticsListItemRow",
-    "MixinMobsStatisticsList",
-    "MixinMobsStatisticsListMobRow",
-    "MixinStatsScreen"
+    "StatsScreenMixin",
+    "list.GeneralStatisticsListMixin",
+    "list.ItemStatisticsListMixin",
+    "list.MobsStatisticsListMixin",
+    "list.entry.GeneralStatisticsListEntryMixin",
+    "list.entry.ItemStatisticsListItemRowMixin",
+    "list.entry.MobsStatisticsListMobRowMixin"
   ],
   "server": [
   ],

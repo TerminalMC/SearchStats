@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Guntram Blohm
- * Copyright 2024 TerminalMC
+ * Copyright 2025 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,25 @@
  * limitations under the License.
  */
 
-package dev.terminalmc.searchstats.mixin;
+package dev.terminalmc.searchstats.mixin.list.entry;
 
-import dev.terminalmc.searchstats.util.NamedStatEntry;
-import net.minecraft.world.item.Item;
+import dev.terminalmc.searchstats.util.inject.INamedStatEntry;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$ItemStatisticsList$ItemRow")
-public class MixinItemStatisticsListItemRow implements NamedStatEntry {
+import java.util.Locale;
+
+@Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$GeneralStatisticsList$Entry")
+public class GeneralStatisticsListEntryMixin implements INamedStatEntry {
+
     @Shadow
     @Final
-    private Item item;
+    private Component statDisplay;
 
     @Override
     public boolean searchstats$matchesSelection(String selection) {
-        return item.getName(item.getDefaultInstance()).getString().toLowerCase().contains(selection);
+        return statDisplay.getString().toLowerCase(Locale.ROOT).contains(selection);
     }
 }

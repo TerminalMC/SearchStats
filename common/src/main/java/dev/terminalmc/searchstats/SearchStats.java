@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Guntram Blohm
- * Copyright 2024 TerminalMC
+ * Copyright 2025 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,27 @@ package dev.terminalmc.searchstats;
 
 import dev.terminalmc.searchstats.util.ModLogger;
 
+import java.util.Locale;
+
 public class SearchStats {
+
     public static final String MOD_ID = "searchstats";
     public static final String MOD_NAME = "SearchStats";
     public static final ModLogger LOG = new ModLogger(MOD_NAME);
 
     private static String searchString = "";
 
-    public static void setSearchString(String s) { 
-        searchString = s.toLowerCase(); 
-    }
-    public static String getSearchString() { 
-        return searchString; 
+    /**
+     * Client initialization.
+     */
+    public static void init() {
     }
 
-    public static void init() {
+    public static void setSearchString(String s) {
+        searchString = s.toLowerCase(Locale.ROOT);
+    }
+
+    public static String getSearchString() {
+        return searchString;
     }
 }
