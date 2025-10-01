@@ -20,18 +20,20 @@ package dev.terminalmc.searchstats.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.terminalmc.searchstats.SearchStats;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.components.tabs.TabNavigationBar;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
+import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
+import net.minecraft.client.gui.layouts.LinearLayout.Orientation;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,36 +41,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static dev.terminalmc.searchstats.util.Localization.localized;
+
 @Mixin(StatsScreen.class)
 public abstract class StatsScreenMixin extends Screen {
 
     @Shadow
-    @Nullable
-    private ObjectSelectionList<?> activeList;
+    public abstract void onStatsUpdated();
+
+    @Shadow
+    private boolean isLoading;
 
     @Shadow
     @Nullable
-    private StatsScreen.GeneralStatisticsList statsList;
-
-    @Shadow
-    @Nullable StatsScreen.ItemStatisticsList itemStatsList;
-
-    @Shadow
-    @Nullable
-    private StatsScreen.MobsStatisticsList mobsStatsList;
+    private TabNavigationBar tabNavigationBar;
 
     @Unique
     private EditBox searchstats$searchField;
-
-    @Shadow
-    public abstract void setActiveList(@Nullable ObjectSelectionList<?> activeList);
-
-    @Shadow
-    public abstract void initLists();
-
-    @Shadow
-    @Final
-    private static int PADDING;
 
     public StatsScreenMixin(Component text) {
         super(text);
@@ -85,121 +74,88 @@ public abstract class StatsScreenMixin extends Screen {
         SearchStats.setSearchString("");
     }
 
-    /**
-     * Modifies the category-switching buttons to also clear the search query.
-     */
     @WrapOperation(
-            method = "initButtons",
+            method = "init",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/Button;builder(Lnet/minecraft/network/chat/Component;Lnet/minecraft/client/gui/components/Button$OnPress;)Lnet/minecraft/client/gui/components/Button$Builder;"
+                    target = "Lnet/minecraft/client/gui/layouts/HeaderAndFooterLayout;addToFooter(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;"
             )
     )
-    private Button.Builder wrapButtonBuilder(
-            Component message,
-            Button.OnPress onPress,
-            Operation<Button.Builder> original
-    ) {
-        // Clear filter when switching between lists
-        return Button.builder(
-                message, (button) -> {
-                    ObjectSelectionList<?> oldActiveList = activeList;
-                    onPress.onPress(button);
-
-                    if (searchstats$searchField != null && activeList != oldActiveList) {
-                        searchstats$searchField.setValue("");
-                        SearchStats.setSearchString("");
-                        searchstats$recreateStatsLists();
-                    }
-                }
-        );
-    }
-
-    /**
-     * Adds the search field to the header.
-     */
-    @WrapOperation(
-            method = "initButtons",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/layouts/HeaderAndFooterLayout;addTitleHeader(Lnet/minecraft/network/chat/Component;Lnet/minecraft/client/gui/Font;)V"
-            )
-    )
-    public void wrapAddTitleHeader(
+    private <T extends LayoutElement> T wrapAddDoneButton(
             HeaderAndFooterLayout instance,
-            Component message,
-            Font font,
-            Operation<Void> original
+            T child,
+            Operation<T> original
     ) {
         int height = 18;
-        int fieldWidth = 145;
-
-        // Use a horizontal LinearLayout for automatic alignment
-        LinearLayout layout = instance.addToHeader(LinearLayout.horizontal().spacing(PADDING));
-
-        // Add the original title first
-        layout.addChild(new StringWidget(font.width(message.getString()), height, message, font));
-
-        // Finally add the search field
+        int fieldWidth = 120;
         searchstats$searchField = new EditBox(font, fieldWidth, height, Component.empty());
         searchstats$searchField.setCanLoseFocus(false);
         searchstats$searchField.setFocused(true);
+        searchstats$searchField.setHint(localized("hint"));
+
+        LinearLayout layout = new LinearLayout(
+                width,
+                Math.max(height, child.getHeight()),
+                Orientation.HORIZONTAL
+        );
         layout.addChild(searchstats$searchField);
+
+        if (child instanceof LinearLayout l) {
+            l.visitChildren(layout::addChild);
+        } else {
+            if (child instanceof Button b)
+                b.setWidth(Math.max(120, b.getWidth() / 2));
+            layout.addChild(child);
+        }
+
+        original.call(instance, layout);
+        return null;
     }
 
     /**
      * Directs keyboard inputs into the search field.
      */
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
         if (searchstats$searchField != null
-                && searchstats$searchField.keyPressed(keyCode, scanCode, modifiers)) {
-            SearchStats.setSearchString(searchstats$searchField.getValue());
-            searchstats$recreateStatsLists();
+                && searchstats$searchField.keyPressed(event)) {
+            searchstats$refresh();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     /**
      * Directs keyboard inputs into the search field.
      */
     @Override
-    public boolean charTyped(char chr, int keyCode) {
-        if (searchstats$searchField.charTyped(chr, keyCode)) {
-            SearchStats.setSearchString(searchstats$searchField.getValue());
-            searchstats$recreateStatsLists();
+    public boolean charTyped(CharacterEvent event) {
+        if (searchstats$searchField.charTyped(event)) {
+            searchstats$refresh();
             return true;
         }
-        return super.charTyped(chr, keyCode);
+        return super.charTyped(event);
     }
 
     /**
      * Directs mouse inputs into the search field.
      */
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (searchstats$searchField != null
-                && searchstats$searchField.mouseClicked(mouseX, mouseY, mouseButton)) {
+                && searchstats$searchField.mouseClicked(event, doubleClick)) {
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
+        return super.mouseClicked(event, doubleClick);
     }
 
-    /**
-     * Re-creates the statistics lists to apply a change in the search query.
-     */
     @Unique
-    private void searchstats$recreateStatsLists() {
-        if (activeList == statsList) {
-            initLists();
-            setActiveList(statsList);
-        } else if (activeList == itemStatsList) {
-            initLists();
-            setActiveList(itemStatsList);
-        } else if (activeList == mobsStatsList) {
-            initLists();
-            setActiveList(mobsStatsList);
-        }
+    private void searchstats$refresh() {
+        SearchStats.setSearchString(searchstats$searchField.getValue());
+        int selected = SearchStats.selectedTab;
+        isLoading = true;
+        onStatsUpdated();
+        if (selected >= 0 && tabNavigationBar != null)
+            tabNavigationBar.selectTab(selected, false);
     }
 }

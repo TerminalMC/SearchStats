@@ -35,6 +35,8 @@ public class SearchStats {
     public static void init() {
     }
 
+    public static int selectedTab;
+
     public static void setSearchString(String s) {
         searchString = s.toLowerCase(Locale.ROOT);
     }

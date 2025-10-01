@@ -1,5 +1,6 @@
 {
   "searchstats.name": "SearchStats",
   "modmenu.descriptionTranslation.searchstats": "Adds a search bar to the statistics screen to quickly find specific entries.",
-  "fml.menu.mods.info.description.searchstats": "Adds a search bar to the statistics screen to quickly find specific entries."
+  "fml.menu.mods.info.description.searchstats": "Adds a search bar to the statistics screen to quickly find specific entries.",
+  "searchstats.hint": "Search stats..."
 }

@@ -8,10 +8,12 @@
   ],
   "client": [
     "StatsScreenMixin",
+    "TabNavigationBarMixin",
     "list.GeneralStatisticsListMixin",
     "list.ItemStatisticsListMixin",
     "list.MobsStatisticsListMixin",
     "list.entry.GeneralStatisticsListEntryMixin",
+    "list.entry.ItemStatisticsListHeaderEntryMixin",
     "list.entry.ItemStatisticsListItemRowMixin",
     "list.entry.MobsStatisticsListMobRowMixin"
   ],
