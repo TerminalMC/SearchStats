@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Guntram Blohm
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import dev.terminalmc.searchstats.util.inject.INamedStatEntry;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$ItemStatisticsList$HeaderEntry")
-public class ItemStatisticsListHeaderEntryMixin implements INamedStatEntry {
+public abstract class ItemStatisticsListHeaderEntryMixin implements INamedStatEntry {
 
     @Override
     public boolean searchstats$matchesSelection(String selection) {

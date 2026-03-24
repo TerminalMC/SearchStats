@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Guntram Blohm
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -116,7 +117,7 @@ public abstract class StatsScreenMixin extends Screen {
      * Directs keyboard inputs into the search field.
      */
     @Override
-    public boolean keyPressed(KeyEvent event) {
+    public boolean keyPressed(@NonNull KeyEvent event) {
         if (searchstats$searchField != null
                 && searchstats$searchField.keyPressed(event)) {
             searchstats$refresh();
@@ -129,7 +130,7 @@ public abstract class StatsScreenMixin extends Screen {
      * Directs keyboard inputs into the search field.
      */
     @Override
-    public boolean charTyped(CharacterEvent event) {
+    public boolean charTyped(@NonNull CharacterEvent event) {
         if (searchstats$searchField.charTyped(event)) {
             searchstats$refresh();
             return true;
@@ -141,7 +142,7 @@ public abstract class StatsScreenMixin extends Screen {
      * Directs mouse inputs into the search field.
      */
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean doubleClick) {
         if (searchstats$searchField != null
                 && searchstats$searchField.mouseClicked(event, doubleClick)) {
             return true;
