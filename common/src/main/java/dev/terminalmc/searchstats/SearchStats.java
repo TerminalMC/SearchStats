@@ -17,7 +17,8 @@
 
 package dev.terminalmc.searchstats;
 
-import dev.terminalmc.searchstats.util.ModLogger;
+import dev.terminalmc.searchstats.util.Logging;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 
@@ -25,7 +26,7 @@ public class SearchStats {
 
     public static final String MOD_ID = "searchstats";
     public static final String MOD_NAME = "SearchStats";
-    public static final ModLogger LOG = new ModLogger(MOD_NAME);
+    public static final Logger LOG = Logging.getLogger(MOD_ID);
 
     private static String searchString = "";
 
