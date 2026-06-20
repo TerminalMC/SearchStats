@@ -34,7 +34,7 @@ public abstract class TabNavigationBarMixin {
 
     @Shadow
     @Final
-    private ImmutableList<Tab> tabs;
+    protected ImmutableList<Tab> tabs;
 
     @WrapOperation(
             method = "selectTab",

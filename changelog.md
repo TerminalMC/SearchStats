@@ -1,10 +1,13 @@
 # Changelog
 
-## 1.102.1
+## 1.103.0
 
-- Removed duplicate logger names
+- Updated to mc26.2
 
-## 1.2.0
+## 1.3.0-beta.2
 
-- Updated to mc26.1.2
-- Removed refmap usages
+- Removed redundant ModMenu initializer
+
+## 1.3.0-beta.1
+
+- Updated to mc26.2-pre.2
