@@ -30,6 +30,10 @@ public class SearchStats {
 
     private static String searchString = "";
 
+    private SearchStats() {
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
+    }
+
     /**
      * Client initialization.
      */

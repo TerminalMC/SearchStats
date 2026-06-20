@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class Services {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("Framework (Service)");
+    private static final Logger LOGGER = LoggerFactory.getLogger("SearchStats (Service)");
 
     private Services() {
         throw new UnsupportedOperationException("This class cannot be instantiated.");
